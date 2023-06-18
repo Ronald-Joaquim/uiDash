@@ -4,10 +4,11 @@ import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine } from "react-icons/ri";
 import { Pagination } from "../../components/Pagination";
 import NextLink from "next/link";
-import { useUsers } from "../../services/hooks/useUsers";
+import { getUsers, useUsers } from "../../services/hooks/useUsers";
 import { useState } from "react";
 import { queryClient } from "../../services/queryClient";
 import { api } from "../../services/api";
+import { GetServerSideProps } from "next";
 
 type User = {
     id: string;
@@ -16,9 +17,11 @@ type User = {
     createdAt: string;
 }
 
-export default function UserList() {
+export default function UserList({ users }) {
     const [page, setPage] = useState(1)
-    const { data, isLoading, isFetching, error } = useUsers(page)
+    const { data, isLoading, isFetching, error } = useUsers(page, {
+        initialData: users,
+    })
 
     const isWideVersion = useBreakpointValue({
         base: false,
